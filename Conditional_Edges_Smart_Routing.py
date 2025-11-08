@@ -3,10 +3,13 @@ from typing_extensions import TypedDict
 from langgraph.graph import StateGraph, START, END
 from openai import OpenAI
 from typing import Optional, Literal
+import google.generativeai as genai
+import os
 
 load_dotenv()
 
 client = OpenAI()
+genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
 class State(TypedDict):
     user_query: str
@@ -14,6 +17,7 @@ class State(TypedDict):
     is_good: Optional[bool]
 
 def chatbot(state: State):
+    print("ChatBot Node: ", state)
     response = client.chat.completions.create(
         model="gpt-4.1-mini",
         messages=[
@@ -25,23 +29,42 @@ def chatbot(state: State):
     return state
 
 def evaluate_response(state: State) -> Literal["chatbot_gemini", "endnode"]:
-    if True:
+    print("Evaluate Response Node: ", state)
+    
+    evaluation_prompt = f"""
+    Evaluate the following response to the user query. Determine if it's accurate, helpful, and complete.
+    
+    User Query: {state.get("user_query")}
+    Response: {state.get("llm_output")}
+    
+    Reply with only "GOOD" if the response is satisfactory, or "BAD" if it needs improvement.
+    """
+    
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[
+            {"role": "user", "content": evaluation_prompt}
+        ]
+    )
+    
+    evaluation = response.choices[0].message.content.strip().upper()
+    state["is_good"] = evaluation == "GOOD"
+    
+    if state["is_good"]:
         return "endnode"
     
     return "chatbot_gemini"
 
 def chatbot_gemini(state: State):
-    response = client.chat.completions.create(
-        model="gpt-4.1-mini",
-        messages=[
-            {"role": "user", "content": state.get("user_query")}
-        ]
-    )
+    print("ChatBot Gemini Node: ", state)
+    model = genai.GenerativeModel("gemini-pro")
+    response = model.generate_content(state.get("user_query"))
 
-    state["llm_output"] = response.choices[0].message.content
+    state["llm_output"] = response.text
     return state
 
 def endnode(state: State):
+    print("END Node: ", state)
     return state
 
 graph_builder = StateGraph(State)
@@ -58,4 +81,6 @@ graph_builder.add_edge("endnode", END)
 
 graph = graph_builder.compile()
 
-graph.invoke(State({"user_query": "Hey, what is 2 + 2 ? "}))
+updated_state = graph.invoke(State({"user_query": "Hey, what is 2 + 2 ? "}))
+print(updated_state)
+

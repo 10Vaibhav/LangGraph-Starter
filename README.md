@@ -1,10 +1,10 @@
 # LangGraph-Starter
 
-A collection of LangGraph examples demonstrating core concepts like state management, node composition, and conditional routing with multiple LLM providers.
+A collection of LangGraph examples demonstrating core concepts like state management, node composition, conditional routing, and persistent conversation memory with multiple LLM providers.
 
 ## Overview
 
-This repository contains practical examples to help you get started with LangGraph, a framework for building stateful, multi-actor applications with LLMs.
+This repository contains practical examples to help you get started with LangGraph, a framework for building stateful, multi-actor applications with LLMs. Learn how to build basic graph flows, implement smart routing with conditional edges, and create chatbots with persistent memory using MongoDB checkpointing.
 
 ## Examples
 
@@ -38,6 +38,24 @@ An advanced example showcasing:
 **Graph Flow:**
 ![LangGraph Conditional Edges Smart Routing Flow Diagram](./LangGraph._Flow_Diagram_Conditional_Edges.png)
 
+
+### 3. LangGraph_Checkpoint.py - Persistent Conversation Memory
+
+A stateful chatbot example demonstrating:
+- **MongoDB Checkpointing**: Persists conversation history across sessions
+- **Thread-based Memory**: Uses thread IDs to maintain separate conversation contexts
+- **Session Continuity**: Resume conversations from where you left off
+- **Streaming Responses**: Real-time message display
+
+**Key Features:**
+```python
+# Conversations are stored in MongoDB with thread_id
+config = {"configurable": {"thread_id": "user_123"}}
+# Same thread_id retrieves previous conversation history
+```
+
+**Use Case:** Build chatbots that remember user context across multiple sessions, enabling personalized and continuous interactions.
+
 ## Key LangGraph Concepts
 
 ### State Management
@@ -66,4 +84,4 @@ graph = graph_builder.compile()
 
 ## License
 
-See LICENSE file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

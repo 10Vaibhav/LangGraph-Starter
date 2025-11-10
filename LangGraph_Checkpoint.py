@@ -31,7 +31,7 @@ graph_builder.add_edge("chatbot", END)
 def compile_graph_with_checkpointer(checkpointer):
     return  graph_builder.compile(checkpointer=checkpointer)
 
-DB_URL = "mongodb://admin:admin@localhost:27017"
+DB_URL = os.getenv("DB_URL")
 with MongoDBSaver.from_conn_string(DB_URL) as checkpointer:
     graph_with_checkpointer = compile_graph_with_checkpointer(checkpointer=checkpointer)
 

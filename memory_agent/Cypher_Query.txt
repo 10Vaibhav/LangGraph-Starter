@@ -1,0 +1,191 @@
+🔥 NEO4J CYPHER QUERY CHEAT SHEET 🔥
+==================================
+
+🧠 BASICS
+----------
+CREATE a Node:
+    CREATE (n:Label {property: 'value'})
+    Example: CREATE (u:User {name:'Vaibhav', age:23})
+
+VIEW All Nodes:
+    MATCH (n) RETURN n;
+
+CREATE a Relationship:
+    CREATE (a)-[:REL_TYPE]->(b)
+    Example: CREATE (u:User {name:'Vaibhav'})-[:WORKS_AT]->(c:Company {name:'Google'})
+
+RETURN Data:
+    MATCH (u:User) RETURN u.name
+
+ALIAS a Node:
+    MATCH (u:User) RETURN u AS user
+
+
+🧩 MATCHING NODES
+-----------------
+Match Node by Label:
+    MATCH (n:Label)
+
+Match Node by Property:
+    MATCH (n:Label {key:'value'})
+
+Match Nodes and Relationships:
+    MATCH (a:Label1)-[:REL_TYPE]->(b:Label2)
+
+Bidirectional Match:
+    MATCH (a)-[r:REL_TYPE]-(b)
+
+
+✏️ UPDATE & DELETE
+-------------------
+Add Property:
+    MATCH (u:User {name:'Vaibhav'}) SET u.age = 23
+
+Update Property:
+    MATCH (u:User {name:'Vaibhav'}) SET u.age = 24
+
+Remove Property:
+    MATCH (u:User) REMOVE u.age
+
+Delete Node:
+    MATCH (u:User {name:'Alex'}) DELETE u
+
+Delete Relationship:
+    MATCH (u)-[r:WORKS_AT]->(c) DELETE r
+
+Detach Delete (Delete node + relationships):
+    MATCH (n) DETACH DELETE n
+
+
+🧮 FILTERING (WHERE)
+---------------------
+Equals:
+    MATCH (u:User) WHERE u.name = 'Vaibhav' RETURN u
+
+Not Equals:
+    MATCH (u:User) WHERE u.name <> 'Alex' RETURN u
+
+Greater/Less Than:
+    WHERE n.age > 20
+
+AND / OR:
+    WHERE n.age > 20 AND n.city='Pune'
+
+String Contains:
+    WHERE n.name CONTAINS 'V'
+
+Starts/Ends With:
+    WHERE n.name STARTS WITH 'V'
+
+IN List:
+    WHERE n.city IN ['Pune', 'Delhi']
+
+
+🧠 RETURN & ORDERING
+---------------------
+Return Multiple Fields:
+    RETURN n.name, n.age
+
+Distinct Values:
+    RETURN DISTINCT n.city
+
+Sorting:
+    ORDER BY n.age DESC
+
+Limit Results:
+    MATCH (u:User) RETURN u LIMIT 5
+
+Skip Results:
+    SKIP 3
+
+
+🔁 RELATIONSHIPS
+----------------
+Outgoing:
+    (a)-[:REL_TYPE]->(b)
+
+Incoming:
+    (a)<-[:REL_TYPE]-(b)
+
+Any Direction:
+    (a)-[:REL_TYPE]-(b)
+
+With Relationship Properties:
+    CREATE (a)-[:REL_TYPE {since:2020}]->(b)
+
+Return Relationship:
+    MATCH (a)-[r]->(b) RETURN type(r), r.property
+
+
+🧰 AGGREGATIONS
+----------------
+Count:
+    MATCH (u:User) RETURN count(u)
+
+Collect:
+    MATCH (u:User)-[:WORKS_AT]->(c:Company) RETURN c.name, collect(u.name)
+
+Average:
+    RETURN avg(u.age)
+
+Max/Min:
+    RETURN max(u.age), min(u.age)
+
+
+🧩 MERGE (UPSERT)
+------------------
+Create if not exist:
+    MERGE (n:Label {prop:'value'})
+
+Create Relationship if not exist:
+    MERGE (a)-[:REL_TYPE]->(b)
+
+
+⚡ INDEXES & CONSTRAINTS
+-------------------------
+Create Index:
+    CREATE INDEX FOR (n:Label) ON (n.prop)
+
+Drop Index:
+    DROP INDEX index_name
+
+Unique Constraint:
+    CREATE CONSTRAINT FOR (n:User) REQUIRE n.name IS UNIQUE
+
+
+🔍 ADVANCED MATCH PATTERNS
+---------------------------
+Variable Length Relationship:
+    MATCH (a)-[:REL_TYPE*1..3]->(b)
+
+Path Return:
+    MATCH p=(a)-[*]->(b) RETURN p
+
+Shortest Path:
+    MATCH p=shortestPath((a)-[*]-(b)) RETURN p
+
+
+🧾 TRANSACTIONS & MISC
+-----------------------
+Create Multiple Nodes:
+    CREATE (a:User {name:'A'}), (b:User {name:'B'})
+
+Combine Queries:
+    WITH a, b ... RETURN something
+
+Comments:
+    // This is a comment
+
+
+🧠 EXAMPLE USE CASE
+--------------------
+CREATE (u:User {name:'Vaibhav', role:'Engineer'})
+CREATE (c:Company {name:'Google'})
+CREATE (u)-[:WORKS_AT]->(c);
+
+MATCH (u:User)-[:WORKS_AT]->(c:Company {name:'Google'})
+RETURN u.name;
+
+==================================
+END OF CHEAT SHEET
+==================================

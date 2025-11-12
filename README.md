@@ -9,7 +9,7 @@ This repository contains practical examples to help you get started with LangGra
 ## Prerequisites
 
 - Python 3.8+
-- Docker (for MongoDB and Qdrant)
+- Docker (for MongoDB, Qdrant, and Neo4j)
 - OpenAI API key
 - Google Gemini API key (for conditional routing example)
 
@@ -65,11 +65,13 @@ config = {"configurable": {"thread_id": "user_123"}}
 
 ### 4. memory_agent - Semantic Memory with Mem0
 
-A practical implementation of semantic memory using Mem0 and Qdrant vector database:
+A practical implementation of semantic memory using Mem0 with support for both Qdrant vector database and Neo4j graph database:
 - **Persistent User Memory**: Stores and retrieves user-specific context across conversations
 - **Vector Search**: Uses embeddings to find relevant memories semantically
 - **Multi-layered Memory**: Supports different memory types (user, session, agent)
-- **Qdrant Integration**: Fast vector similarity search with local deployment
+- **Dual Storage Options**: 
+  - **Qdrant**: Fast vector similarity search with local deployment
+  - **Neo4j**: Graph-based memory storage for relationship-aware context
 
 **Key Features:**
 ```python
@@ -86,13 +88,27 @@ SYSTEM_PROMPT = f"Context: {json.dumps(memories)}"
 **Memory Types:**
 ![Types of Memory](./memory_agent/Types_of_Memory.png)
 
+**Neo4j Graph Visualization:**
+![Neo4j Graph Visualization](./memory_agent/Neo4j_Graph_visualisation.png)
+
 **Architecture:**
 - Mem0 for memory management
 - OpenAI embeddings (text-embedding-3-small)
-- Qdrant vector database for storage
+- Storage options:
+  - Qdrant vector database for semantic search
+  - Neo4j graph database for relationship-based memory
 - GPT-4 for response generation
 
-**Use Case:** Build AI agents that remember user preferences, past interactions, and context, enabling truly personalized conversations that improve over time.
+**Neo4j Integration:**
+Neo4j provides a graph-based approach to memory storage, enabling:
+- **Relationship Mapping**: Connect memories based on entities, topics, and context
+- **Graph Queries**: Traverse memory relationships for deeper context understanding
+- **Visual Exploration**: Visualize memory connections and patterns
+- **Complex Queries**: Use Cypher query language for advanced memory retrieval
+
+Learn more about Neo4j: [Neo4j Getting Started Guide](https://neo4j.com/docs/getting-started/)
+
+**Use Case:** Build AI agents that remember user preferences, past interactions, and context, enabling truly personalized conversations that improve over time. Use Neo4j when you need to understand relationships between memories and entities.
 
 ## Key LangGraph Concepts
 

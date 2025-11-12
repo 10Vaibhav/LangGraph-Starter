@@ -9,6 +9,9 @@ load_dotenv()
 client = OpenAI()
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+NEO_CONNECTION_URL = os.getenv("NEO_CONNECTION_URL")
+NEO_USERNAME = os.getenv("NEO_USERNAME")
+NEO_PASSWORD = os.getenv("NEO_PASSWORD")
 
 config = {
     "version": "v1.1",
@@ -19,6 +22,14 @@ config = {
     "llm": {
         "provider": "openai",
         "config": {"api_key": OPENAI_API_KEY, "model": "gpt-4.1"}
+    },
+    "graph_store": {
+        "provider": "neo4j",
+        "config": {
+            "url": NEO_CONNECTION_URL,
+            "username": NEO_USERNAME,
+            "password": NEO_PASSWORD
+        }
     },
     "vector_store": {
         "provider": "qdrant",

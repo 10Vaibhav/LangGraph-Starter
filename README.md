@@ -1,10 +1,10 @@
 # LangGraph-Starter
 
-A collection of LangGraph examples demonstrating core concepts like state management, node composition, conditional routing, and persistent conversation memory with multiple LLM providers.
+LangGraph examples demonstrating state management, conditional routing, persistent memory with MongoDB, and semantic memory using Qdrant and Neo4j. Build stateful AI agents with multiple LLM providers.
 
 ## Overview
 
-This repository contains practical examples to help you get started with LangGraph, a framework for building stateful, multi-actor applications with LLMs. Learn how to build basic graph flows, implement smart routing with conditional edges, and create chatbots with persistent memory using MongoDB checkpointing.
+Practical examples for building stateful applications with LangGraph. Learn basic graph flows, smart routing with conditional edges, persistent chatbots with MongoDB checkpointing, and semantic memory systems using Mem0, Qdrant vector search, and Neo4j graph databases.
 
 ## Prerequisites
 
@@ -148,6 +148,9 @@ pip install -r requirements.txt
 OPENAI_API_KEY=your_openai_key
 GOOGLE_API_KEY=your_gemini_key
 DB_URL=mongodb://admin:admin@localhost:27017
+NEO_USERNAME=neo4j
+NEO_PASSWORD=your_neo4j_password
+NEO_CONNECTION_URL=bolt://localhost:7687
 ```
 
 3. Start required services:

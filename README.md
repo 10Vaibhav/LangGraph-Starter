@@ -84,7 +84,7 @@ SYSTEM_PROMPT = f"Context: {json.dumps(memories)}"
 ```
 
 **Memory Types:**
-![Types of Memory](./memory_agent/Types%20of%20Memory.png)
+![Types of Memory](./memory_agent/Types_of_Memory.png)
 
 **Architecture:**
 - Mem0 for memory management

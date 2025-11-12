@@ -6,6 +6,13 @@ A collection of LangGraph examples demonstrating core concepts like state manage
 
 This repository contains practical examples to help you get started with LangGraph, a framework for building stateful, multi-actor applications with LLMs. Learn how to build basic graph flows, implement smart routing with conditional edges, and create chatbots with persistent memory using MongoDB checkpointing.
 
+## Prerequisites
+
+- Python 3.8+
+- Docker (for MongoDB and Qdrant)
+- OpenAI API key
+- Google Gemini API key (for conditional routing example)
+
 ## Examples
 
 ### 1. LangGraph_Learnings.py - Basic Graph Flow
@@ -56,6 +63,37 @@ config = {"configurable": {"thread_id": "user_123"}}
 
 **Use Case:** Build chatbots that remember user context across multiple sessions, enabling personalized and continuous interactions.
 
+### 4. memory_agent - Semantic Memory with Mem0
+
+A practical implementation of semantic memory using Mem0 and Qdrant vector database:
+- **Persistent User Memory**: Stores and retrieves user-specific context across conversations
+- **Vector Search**: Uses embeddings to find relevant memories semantically
+- **Multi-layered Memory**: Supports different memory types (user, session, agent)
+- **Qdrant Integration**: Fast vector similarity search with local deployment
+
+**Key Features:**
+```python
+# Store memories with user context
+mem_client.add(user_id="user_123", messages=[...])
+
+# Semantic search through memories
+memories = mem_client.search(query="user query", user_id="user_123")
+
+# Inject relevant memories into LLM context
+SYSTEM_PROMPT = f"Context: {json.dumps(memories)}"
+```
+
+**Memory Types:**
+![Types of Memory](./memory_agent/Types%20of%20Memory.png)
+
+**Architecture:**
+- Mem0 for memory management
+- OpenAI embeddings (text-embedding-3-small)
+- Qdrant vector database for storage
+- GPT-4 for response generation
+
+**Use Case:** Build AI agents that remember user preferences, past interactions, and context, enabling truly personalized conversations that improve over time.
+
 ## Key LangGraph Concepts
 
 ### State Management
@@ -81,6 +119,35 @@ graph_builder.add_edge(START, "first_node")
 graph_builder.add_conditional_edges("node", routing_function)
 graph = graph_builder.compile()
 ```
+
+## Setup
+
+1. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+2. Create `.env` file with API keys:
+```
+OPENAI_API_KEY=your_openai_key
+GOOGLE_API_KEY=your_gemini_key
+DB_URL=mongodb://admin:admin@localhost:27017
+```
+
+3. Start required services:
+```bash
+# For LangGraph_Checkpoint.py
+docker-compose up -d
+
+# For memory_agent
+cd memory_agent
+docker-compose up -d
+```
+
+## Resources
+
+- [LangGraph Documentation](https://docs.langchain.com/oss/python/langgraph/overview) - Official LangGraph documentation and guides
+- [Mem0 Dashboard](https://app.mem0.ai/dashboard/get-started) - Get started with Mem0 for memory management
 
 ## License
 
